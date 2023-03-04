@@ -4,7 +4,7 @@ const validateLogin = (req, res, next) => {
   console.log(token);
 
   if (!token) {
-    return res.sendStatus(500);
+    return res.status(401).json({ message: 'Token not found' });
   }
 
   return next();

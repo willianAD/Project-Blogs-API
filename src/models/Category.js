@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Category.associate = (models) => {
-  //   User.hasMany(models.BlogPost,
-  //     { foreignKey: 'categoryId', as: 'BlogPosts' });
+  //   User.hasMany(models.,
+  //     { foreignKey: 'categoryId', as: '' });
   // };
 
   return Category;
