@@ -1,14 +1,23 @@
-const { User } = require('../models/User');
+const { userService } = require('../services');
+const { newToken } = require('../utils/token');
 
 const login = async (req, res) => {
-  const { displayName, email, password, images } = req.body;
-  const user = await User.create({ displayName, email, password, images });
+  const { email, password } = req.body;
 
-  if (!user) {
-    return res.status(400).send({ message: 'Some required fields are missing' });
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Some required fields are missing' });
   }
+
+  const user = await userService.getUsersEmail(email);
+
+  if (user.email !== email || user.password !== password) {
+    return res.status(400).json({ message: 'Invalid fields' });
+  }
+
+  const { password: _, ...userData } = user.dataValues;
+  const token = newToken(userData);
   
-  return res.status(200).json({ token: 'foi' });
+  return res.status(200).json({ token });
 };
 
 module.exports = {
