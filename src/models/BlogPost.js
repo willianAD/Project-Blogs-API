@@ -15,13 +15,13 @@ module.exports = (sequelize, DataTypes) => {
 
   BlogPost.associate = (models) => {
     BlogPost.belongsTo(models.User,
-      { foreignKey: 'userId', as: 'user' });
+      { foreignKey: 'userId', as: 'User' });
   };
 
-  BlogPost.associate = (models) => {
-    BlogPost.hasMany(models.PostCategory,
-      { foreignKey: 'postId', as: 'PostCategorie' });
-  };
+  // BlogPost.associate = (models) => {
+  //   BlogPost.hasMany(models.PostCategory,
+  //     { foreignKey: 'postId', as: 'PostCategorie' });
+  // };
 
   return BlogPost;
 };
