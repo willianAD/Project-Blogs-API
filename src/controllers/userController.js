@@ -36,7 +36,31 @@ const createUser = async (req, res) => {
   return res.status(201).json({ token });
 };
 
+const getUser = async (_req, res) => {
+  const usersAll = await userService.getAllUsers();
+
+  const result = usersAll
+    .map((e) => ({ id: e.id, displayName: e.displayName, email: e.email, image: e.image }));
+
+  return res.status(200).json(result);
+};
+
+const getUserId = async (req, res) => {
+  const { id } = req.params;
+  const user = await userService.getByUserId(id);
+  
+  if (!user) {
+    return res.status(404).json({ message: 'User does not exist' });
+  }
+
+  const { password: _, ...userData } = user.dataValues;
+
+  return res.status(200).json(userData);
+};
+
 module.exports = {
   login,
   createUser,
+  getUser,
+  getUserId,
 };
