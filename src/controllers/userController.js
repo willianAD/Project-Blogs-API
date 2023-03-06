@@ -14,8 +14,8 @@ const login = async (req, res) => {
     return res.status(400).json({ message: 'Invalid fields' });
   }
 
-  const { password: _, ...userData } = user.dataValues;
-  const token = newToken(userData);
+  // const { password: _, ...userData } = user.dataValues;
+  const token = newToken(email);
   
   return res.status(200).json({ token });
 };

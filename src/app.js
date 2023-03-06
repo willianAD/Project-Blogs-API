@@ -2,8 +2,11 @@ const express = require('express');
 
 const { login, createUser, getUser, getUserId } = require('./controllers/userController');
 
+const { createCategory } = require('./controllers/categoryController');
+
 const { validateToken } = require('./middlewares/validateToken');
 const { validateUser } = require('./middlewares/validateUser');
+const { validateName } = require('./middlewares/validateNameCategory');
 
 const app = express();
 
@@ -21,5 +24,7 @@ app.post('/user', validateUser, createUser);
 app.get('/user/:id', validateToken, getUserId);
 
 app.get('/user', validateToken, getUser);
+
+app.post('/categories', validateToken, validateName, createCategory);
 
 module.exports = app;
