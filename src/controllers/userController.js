@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { userService } = require('../services');
 const { newToken } = require('../utils/token');
 
@@ -58,9 +59,28 @@ const getUserId = async (req, res) => {
   return res.status(200).json(userData);
 };
 
+const deleteUser = async (req, res) => {
+  const token = req.header('authorization');
+
+  const secret = process.env.JWT_SECRET;
+  const { data } = jwt.verify(token, secret);
+
+  const getId = await userService.getUsersEmail(data);
+
+  if (!getId) {
+    return res.status(404).json({ message: 'User does not exist' });
+  }
+
+  const { id } = getId.dataValues;
+  await userService.deleteByUserId(id);
+
+  return res.status(204).end();
+};
+
 module.exports = {
   login,
   createUser,
   getUser,
   getUserId,
+  deleteUser,
 };

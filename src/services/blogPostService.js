@@ -7,7 +7,13 @@ const getAllPosts = () => BlogPost.findAll({
   ],
 });
 
-// const createBlogPost = (name) => BlogPost.create(name);
+const createBlogPost = ({ title, content, userId }) => BlogPost.create({
+  title,
+  content,
+  userId,
+  published: new Date(),
+  updated: new Date(),
+});
 
 const getByBlogPostId = (id) => BlogPost.findAll({
   where: { id },
@@ -17,11 +23,14 @@ const getByBlogPostId = (id) => BlogPost.findAll({
   ],
 });
 
-const getOneBlogPost = (id) => User.findByPk(id);
+const getOneBlogPost = (id) => BlogPost.findByPk(id);
+
+const deleteByBlogPostId = (id) => BlogPost.destroy({ where: { id } });
 
 module.exports = {
   getAllPosts,
   getByBlogPostId,
   getOneBlogPost,
-  // createBlogPost,
+  createBlogPost,
+  deleteByBlogPostId,
 };
