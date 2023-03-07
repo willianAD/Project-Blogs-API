@@ -1,14 +1,19 @@
 const jwt = require('jsonwebtoken');
-const { blogPostService, userService, categoryService } = require('../services');
+const {
+  blogPostService,
+  userService,
+  categoryService,
+  postCategoryService,
+} = require('../services');
 
 const createPost = async (req, res) => {
   const { title, content, categoryIds } = req.body;
   const token = req.header('authorization');
 
-  const veryfyCategoruId = await Promise.all(categoryIds
+  const veryfyCategoryId = await Promise.all(categoryIds
     .map((e) => categoryService.getCategoryById(e)));
   
-  if (veryfyCategoruId.includes(null)) {
+  if (veryfyCategoryId.includes(null)) {
     return res.status(400).json({ message: 'one or more "categoryIds" not found' });
   }
 
@@ -19,12 +24,14 @@ const createPost = async (req, res) => {
 
   const userId = id.dataValues.id;
   
-  const result = await Promise.all(categoryIds
-    .map((e) => blogPostService.createBlogPost({ title, content, userId, categoryIds: e })));
+  const result = await blogPostService.createBlogPost({ title, content, userId });
 
-  // const result = await blogPostService.createBlogPost({ title, content, userId });
+  const postId = result.dataValues.id;
 
-  return res.status(201).json(result[0]);
+  await Promise.all(categoryIds
+    .map((e) => postCategoryService.createPostCategory({ postId, categoryId: e })));
+
+  return res.status(201).json(result);
 };
 
 const getBlogPost = async (_req, res) => {

@@ -7,7 +7,7 @@ const getAllPosts = () => BlogPost.findAll({
   ],
 });
 
-const createBlogPost = ({ title, content, userId }) => BlogPost.create({
+const createBlogPost = async ({ title, content, userId }) => BlogPost.create({
   title,
   content,
   userId,
