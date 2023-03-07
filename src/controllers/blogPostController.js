@@ -19,9 +19,7 @@ const createPost = async (req, res) => {
 
   const secret = process.env.JWT_SECRET;
   const { data } = jwt.verify(token, secret);
-
   const id = await userService.getUsersEmail(data);
-
   const userId = id.dataValues.id;
   
   const result = await blogPostService.createBlogPost({ title, content, userId });
@@ -60,11 +58,20 @@ const getBlogPostById = async (req, res) => {
 
 const deletePost = async (req, res) => {
   const { id } = req.params;
+  const token = req.header('authorization');
+  
+  const secret = process.env.JWT_SECRET;
+  const { data } = jwt.verify(token, secret);
+  const getId = await userService.getUsersEmail(data);
 
   const verifyId = await blogPostService.getOneBlogPost(id);
 
   if (!verifyId) {
     return res.status(404).json({ message: 'Post does not exist' });
+  }
+
+  if (getId.dataValues.id !== Number(id)) {
+    return res.status(401).json({ message: 'Unauthorized user' });
   }
 
   await blogPostService.deleteByBlogPostId(id);
