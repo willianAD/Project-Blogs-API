@@ -22,6 +22,7 @@ const { validateToken } = require('./middlewares/validateToken');
 const { validateUser } = require('./middlewares/validateUser');
 const { validateName } = require('./middlewares/validateNameCategory');
 const { validateInputs } = require('./middlewares/validateBlogPost');
+const { validatePutPost } = require('./middlewares/validatePostUpdate');
 
 const app = express();
 
@@ -52,7 +53,7 @@ app.post('/post', validateInputs, validateToken, createPost);
 
 app.get('/post', validateToken, getBlogPost);
 
-app.put('/post/:id', validateToken, putBlogPostById);
+app.put('/post/:id', validatePutPost, validateToken, putBlogPostById);
 
 app.delete('/post/:id', validateToken, deletePost);
 

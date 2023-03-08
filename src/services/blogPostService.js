@@ -27,7 +27,7 @@ const getOneBlogPost = (id) => BlogPost.findByPk(id);
 
 const deleteByBlogPostId = (id) => BlogPost.destroy({ where: { id } });
 
-const putBlogPostId = ({ title, content, id }) => BlogPost.updated(
+const putBlogPostId = ({ title, content, id }) => BlogPost.update(
   { title, content },
   { where: { id } },
 );

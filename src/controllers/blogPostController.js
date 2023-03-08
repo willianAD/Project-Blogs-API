@@ -89,7 +89,9 @@ const putBlogPostById = async (req, res) => {
   const { data } = jwt.verify(token, secret);
   const getId = await userService.getUsersEmail(data);
 
-  if (getId.dataValues.id !== Number(id)) {
+  const verifyId = await blogPostService.getOneBlogPost(id);
+
+  if (getId.dataValues.id !== verifyId.dataValues.userId) {
     return res.status(401).json({ message: 'Unauthorized user' });
   }
 
@@ -98,7 +100,6 @@ const putBlogPostById = async (req, res) => {
   const posts = await blogPostService.getByBlogPostId(id);
 
   const allPosts = posts.map((e) => e.dataValues);
-  console.log(allPosts);
 
   return res.status(200).json(allPosts[0]);
 };
