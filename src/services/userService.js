@@ -2,7 +2,7 @@ const { User } = require('../models');
 
 const getAllUsers = () => User.findAll();
 
-const getUsersEmail = ({ email }) => User.findOne({ where: email });
+const getUsersEmail = (email) => User.findOne({ where: { email } });
 
 const getByUserId = (id) => User.findByPk(id);
 

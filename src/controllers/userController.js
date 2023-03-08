@@ -11,11 +11,12 @@ const login = async (req, res) => {
 
   const user = await userService.getUsersEmail(email);
 
-  if (user.email !== email || user.password !== password) {
+  console.log(user);
+
+  if (!user) {
     return res.status(400).json({ message: 'Invalid fields' });
   }
 
-  // const { password: _, ...userData } = user.dataValues;
   const token = newToken(email);
   
   return res.status(200).json({ token });
@@ -68,7 +69,7 @@ const deleteUser = async (req, res) => {
   const getId = await userService.getUsersEmail(data);
 
   if (!getId) {
-    return res.status(404).json({ message: 'User does not exist' });
+    return res.status(404).json({ message: 'Unauthorized user' });
   }
 
   const { id } = getId.dataValues;

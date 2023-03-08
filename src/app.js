@@ -15,6 +15,7 @@ const {
   getBlogPostById,
   createPost,
   deletePost,
+  putBlogPostById,
 } = require('./controllers/blogPostController');
 
 const { validateToken } = require('./middlewares/validateToken');
@@ -50,6 +51,8 @@ app.get('/post/:id', validateToken, getBlogPostById);
 app.post('/post', validateInputs, validateToken, createPost);
 
 app.get('/post', validateToken, getBlogPost);
+
+app.put('/post/:id', validateToken, putBlogPostById);
 
 app.delete('/post/:id', validateToken, deletePost);
 

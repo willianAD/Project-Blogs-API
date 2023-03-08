@@ -70,7 +70,8 @@ const deletePost = async (req, res) => {
     return res.status(404).json({ message: 'Post does not exist' });
   }
 
-  if (getId.dataValues.id !== Number(id)) {
+  if (getId.dataValues.id !== verifyId.dataValues.userId) {
+    console.log('entrei');
     return res.status(401).json({ message: 'Unauthorized user' });
   }
 
@@ -79,9 +80,33 @@ const deletePost = async (req, res) => {
   return res.status(204).end();
 };
 
+const putBlogPostById = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const token = req.header('authorization');
+  
+  const secret = process.env.JWT_SECRET;
+  const { data } = jwt.verify(token, secret);
+  const getId = await userService.getUsersEmail(data);
+
+  if (getId.dataValues.id !== Number(id)) {
+    return res.status(401).json({ message: 'Unauthorized user' });
+  }
+
+  await blogPostService.putBlogPostId({ title, content, id });
+
+  const posts = await blogPostService.getByBlogPostId(id);
+
+  const allPosts = posts.map((e) => e.dataValues);
+  console.log(allPosts);
+
+  return res.status(200).json(allPosts[0]);
+};
+
 module.exports = {
   createPost,
   getBlogPost,
   getBlogPostById,
   deletePost,
+  putBlogPostById,
 };

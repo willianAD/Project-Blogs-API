@@ -27,10 +27,16 @@ const getOneBlogPost = (id) => BlogPost.findByPk(id);
 
 const deleteByBlogPostId = (id) => BlogPost.destroy({ where: { id } });
 
+const putBlogPostId = ({ title, content, id }) => BlogPost.updated(
+  { title, content },
+  { where: { id } },
+);
+
 module.exports = {
   getAllPosts,
   getByBlogPostId,
   getOneBlogPost,
   createBlogPost,
   deleteByBlogPostId,
+  putBlogPostId,
 };
