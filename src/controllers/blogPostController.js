@@ -104,10 +104,29 @@ const putBlogPostById = async (req, res) => {
   return res.status(200).json(allPosts[0]);
 };
 
+const getSearch = async (req, res) => {
+  const { q } = req.query;
+
+  if (!q) {
+    const posts = await blogPostService.getAllPosts();
+    const allPosts = posts.map((e) => e.dataValues);
+    return res.status(200).json(allPosts);
+  }
+
+  const result = await blogPostService.getBySearch(q);
+
+  if (!result.length) {
+    return res.status(200).json([]);
+  }
+
+  return res.status(200).json([result[0].dataValues]);
+};
+
 module.exports = {
   createPost,
   getBlogPost,
   getBlogPostById,
   deletePost,
   putBlogPostById,
+  getSearch,  
 };
